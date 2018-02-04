@@ -1,19 +1,16 @@
 <?php
 
 function member_create_account(){
-	//$output                 =   [ 'status' => 1 , 'msg' => 'ONE'];
+
 	$nonce                  =   isset($_POST['_wpnonce']) ? $_POST['_wpnonce'] : '';
 
 	if( !wp_verify_nonce( $nonce, 'member_auth')) {
-		$output = compileOutput(1, 'NONCE!');
-		//die(print_r($output));
-		wp_send_json($output);
+		compileOutput(1, 'NONCE!');
 	}
 
-	/*if ( ( $_POST['username'] == '') || ($_POST['email'] == '') || ($_POST['password'] == '') || ($_POST['repassword'] ) == '') {
-		$output = compileOutput(3, 'Please fill in all the fields!');
-		wp_send_json($output);
-	}*/
+	if ( ( $_POST['username'] == '') || ($_POST['email'] == '') || ($_POST['pass'] == '') || ($_POST['confirm_pass'] ) == '') {
+		compileOutput(3, 'Please fill in all the fields!');
+	}
 
 	$name                   =   sanitize_text_field( $_POST['name']);
 	$username               =   sanitize_text_field( $_POST['username']);
@@ -22,21 +19,14 @@ function member_create_account(){
 	$conform_pass           =   sanitize_text_field( $_POST['confirm_pass']);
 
 	if( username_exists( $username ) ) {
-		$output = compileOutput(4, 'The username you have chosen already exists!');
-		wp_send_json($output);
+		compileOutput(4, 'The username you have chosen already exists!');
 	} else if ( email_exists( $email ) ) {
-		$output = compileOutput(5, 'The email you have chosen is already registered!');
-		wp_send_json($output);
+		compileOutput(5, 'The email you have chosen is already registered!');
 	} else if ( $pass != $conform_pass ) {
-		$output = compileOutput(6, 'The passwords you have entered do not match!');
-		wp_send_json($output);
+		compileOutput(6, 'The passwords you have entered do not match!');
 	} else if ( !is_email($email) ) {
-		$output = compileOutput(7, 'The email you have chosen is incorrect!');
-		wp_send_json($output);
+		compileOutput(7, 'The email you have chosen is incorrect!');
 	}
-
-	// wp_create_user()
-	// wp_insert_user()
 
 	$user_id                =   wp_insert_user([
 		'user_login'        =>  $username,
@@ -55,18 +45,6 @@ function member_create_account(){
 	wp_set_auth_cookie( $user_id, FALSE);
 	do_action( 'wp_login', $user->user_login, $user );
 
-	$output                 =   compileOutput(2 , 'Account created successfully!');
-	wp_send_json($output);
+	compileOutput(2 , 'Account created successfully!');
 
-	// wp_signon()
-
-}
-
-function compileOutput($code = 1, $msg = '') {
-	$output                 =   [
-		'status'            => $code,
-		'msg'               => $msg
-	];
-	return $output;
-	//wp_send_json($output);
 }
