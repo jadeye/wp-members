@@ -24,11 +24,13 @@ include( 'includes/front/enqueue.php');
 include( 'includes/member-auth.php');
 include( 'process/create-account.php');
 include( 'process/member-login.php');
+include( 'includes/admin/dashboard-widgets.php');
 
 // Hooks
 add_action( 'wp_enqueue_scripts', 'm_enqueue_scripts', 100);
 add_action( 'wp_ajax_nopriv_member_create_account', 'member_create_account');
 add_action( 'wp_ajax_nopriv_member_user_login', 'member_user_login');
+add_action( 'wp_dashboard_setup', 'm_add_dashboard_widgets');
 
 // Shortcodes
 add_shortcode( 'member_auth_form', 'm_member_auth_form_shortcode');
