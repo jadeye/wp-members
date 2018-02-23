@@ -13,13 +13,12 @@ if ( !function_exists( 'add_action')){
 	die( "Hi there! I'm just a plugin, not much I can do when called directly.");
 }
 
-//define( 'RECIPE_PLUGIN_FOLDER', __FILE__);
-
 // Setup
 define( 'MEMBER_PLUGIN_URL', __FILE__);
 
 
 // Include
+//include( 'includes/activate.php');
 include( 'includes/front/enqueue.php');
 include( 'includes/member-auth.php');
 include( 'process/create-account.php');
@@ -27,6 +26,7 @@ include( 'process/member-login.php');
 include( 'includes/admin/dashboard-widgets.php');
 
 // Hooks
+//register_activation_hook(__FILE__, 'm_activate_plugin');
 add_action( 'wp_enqueue_scripts', 'm_enqueue_scripts', 100);
 add_action( 'wp_ajax_nopriv_member_create_account', 'member_create_account');
 add_action( 'wp_ajax_nopriv_member_user_login', 'member_user_login');
